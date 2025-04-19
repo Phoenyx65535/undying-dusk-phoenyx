@@ -8,6 +8,7 @@ MAUSOLEUM_EXIT_COORDS = (8, 15, 7)
 BOX_MIMIC_POS = (8, 3, 2)
 DOOR_MIMIC_POS = (8, 5, 2)
 VILLAGE_PORTAL_COORDS = (5, 9, 3)
+VILLAGE_INN_COORDS = (5, 8, 8)
 CLICK_ZONES = {
     'OPEN_DOOR':            {'x': 62, 'y': 43, 'width': 35, 'height': 54},
     'PASS_BEHIND_IVY':      {'x': 54, 'y': 36, 'width': 49, 'height': 58},
@@ -90,19 +91,20 @@ def is_instinct_preventing_to_enter_village(game_state):
     # - when avatar has 2 MP and the scroll, to go see Sage Therel
     # - when avatar has 20 gold, to buy the boots
     # - when avatar has 60 gold, to repair the sword & get a night of rest
-    return (game_state.mp < 2 or 'SCROLL' not in game_state.items) and game_state.gold < 10
+    return False #return (game_state.mp < 2 or 'SCROLL' not in game_state.items) and game_state.gold < 10
 
 
 def is_instinct_preventing_to_enter_templar_academy(game_state):
     # No need to get back there once Templar treasure has been found (and later the sword is bought with it)
-    return game_state.weapon >= 7 or game_state.gold > 30
+    return False #game_state.weapon >= 7 or game_state.gold > 30
 
 
 def is_instinct_preventing_to_pass_mausoleum_portal(game_state):
     # We forbid to get back to village if the heroine has the UNLOCK spell,
     # but hasn't collected all the armor parts yet, or hasn't solved the rotating lever puzzle:
     gs = game_state
-    return gs.spellbook == 3 and (gs.items.count('ARMOR_PART') < 4 or not gs.tile_override_at(MAUSOLEUM_EXIT_COORDS))
+    armor = gs.items.count('ARMOR_PART')
+    return armor==2 or armor==3 #gs.spellbook == 3 and (gs.items.count('ARMOR_PART') < 4 or not gs.tile_override_at(MAUSOLEUM_EXIT_COORDS))
 
 
 def is_instinct_preventing_to_pass_village_portal(game_state):
@@ -111,7 +113,7 @@ def is_instinct_preventing_to_pass_village_portal(game_state):
     # We forbid to get back to Mausoleum if the heroine hasn't picked the UNLOCK spell yet,
     # hasn't taken a night of rest at the inn, or hasn't picked up the staff on the petrified gorgon yet:
     has_staff_been_picked_up = 'STAFF' in game_state.items or game_state.tile_override_at(MAUSOLEUM_EXIT_COORDS)
-    return game_state.spellbook < 3 or game_state.gold >= 10 or not has_staff_been_picked_up
+    return False #game_state.spellbook < 3 or game_state.gold >= 10 or not has_staff_been_picked_up
 
 
 def patch_tileset(tileset):
@@ -182,6 +184,7 @@ def patch_tileset(tileset):
         False,  # 62 = grave_stone_writing
         True,   # 63 = dungeon_boulder_hole
         False,  # 64 = boulder_hole_boulder
+        False,  # 65 = medieval_locked_door
     ])
 
 
@@ -259,6 +262,7 @@ def _patch_tiles(_map):
         x, y = 11, 8;  tiles[y][x] = 55  # secret passage through the trees
         x, y = 11, 9;  tiles[y][x] = 43  # adding stump hidden in the forest
         # x, y = 12, 14; tiles[y][x] = 6   # grass (added to get another whispering wind) (no longer needed, right?)
+        x, y = 10,15;  tiles[y][x] = 18  # initially lock the door so the unlock spell functions after getting the tree secret
     if _map.name == 'Cedar Village':
         x, y = 1, 10;  tiles[y][x] = 6   # allowing space for the boulder so that it does not block the passage
         x, y = 2, 3;   tiles[y][x] = 23  # adding a sign

@@ -3,7 +3,7 @@ from ..entities import Book, Position, SFX
 from ..logs import log
 
 from .scenes import tuto_spells, BASE_MUSIC_URL
-from .world import MAUSOLEUM_PORTAL_COORDS, VILLAGE_PORTAL_COORDS
+from .world import MAUSOLEUM_PORTAL_COORDS, VILLAGE_PORTAL_COORDS, VILLAGE_INN_COORDS
 
 
 BOOKS = {
@@ -71,6 +71,7 @@ def examine_bookshelf(gs, bookshelf_pos, actions, _GameView):
                     log(new_gv.state, f'activating-portal: secrets_found={new_gv.state.secrets_found}')
                     new_gv.add_tile_override(27, coords=MAUSOLEUM_PORTAL_COORDS)
                     new_gv.add_tile_override(27, coords=VILLAGE_PORTAL_COORDS)
+                    new_gv.add_tile_override(65, coords=VILLAGE_INN_COORDS)
         return
     book = BOOKS.get(key)
     if book:

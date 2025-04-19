@@ -111,4 +111,5 @@ _TILE_AS_EMOJI = [
     'GW',                                      # 62: grave_stone_writing
     '  ',                                      # 63: dungeon_boulder_hole
     ansi_wrap('OO', color='cyan'),             # 64: boulder_hole_boulder
+    'Dx',                                      # 65: medieval_locked_door
 ]

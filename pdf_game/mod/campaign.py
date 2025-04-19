@@ -11,7 +11,7 @@ from ..render_treasure import treasure_render_item
 from ..warp_portals import warp_portal_add
 
 from .scenes import abyss_bottom, risking_it_all, seamus_through_small_window, the_end, BASE_MUSIC_URL
-from .world import is_instinct_preventing_to_enter_village, is_instinct_preventing_to_enter_templar_academy, is_instinct_preventing_to_pass_mausoleum_portal, is_instinct_preventing_to_pass_village_portal, BOX_MIMIC_POS, DOOR_MIMIC_POS, MAUSOLEUM_PORTAL_COORDS, MAUSOLEUM_EXIT_COORDS
+from .world import is_instinct_preventing_to_enter_village, is_instinct_preventing_to_enter_templar_academy, is_instinct_preventing_to_pass_mausoleum_portal, is_instinct_preventing_to_pass_village_portal, BOX_MIMIC_POS, DOOR_MIMIC_POS, MAUSOLEUM_PORTAL_COORDS, MAUSOLEUM_EXIT_COORDS, VILLAGE_INN_COORDS
 
 EMPRESS_INTERPHASE_LINES = (
     'Nooooo!',
@@ -68,6 +68,9 @@ def script_it():
     # warp_portal_add(0, (2, 1), 'north', (5, 6), 'south')
     # warp_portal_add(0, (2, 6), 'south', (5, 1), 'north')
     # warp_portal_add(0, (0, 4), 'west', (7, 4), 'west')
+    def _start_game(game_view, _):
+        game_view.add_tile_override(3, coords=(4, 10, 15))  # unlocking door to Cedar Village
+    mapscript_add_trigger((0, 1, 2), _start_game)
 
     #---------------------------
     # Entering: Monastery (maps: 0, 1, 2 & 3)
@@ -204,9 +207,10 @@ def script_it():
         game_view.add_hidden_trigger('BEEN_TO_VILLAGE')
         game_view.add_tile_override(29, coords=(4, 10, 11))  # dead tree
         game_view.add_tile_override(12, coords=(4, 9, 11))   # tree
-        game_view.add_tile_override(18, coords=(4, 10, 15))  # locking door to Cedar Village
+        game_view.remove_tile_override((4, 10, 15))  # locking door to Cedar Village
     mapscript_add_trigger((5, 3, 1), _enter_cedar_village)
     mapscript_add_enemy((4, 10, 14), 'shadow_soul', **shadow_soul_stats, gold=3,
+                        intro_msg="The shadow soul locks\nthe door behind you.", 
                         condition=lambda gs: 'BEEN_TO_VILLAGE' in gs.hidden_triggers)
     # Beating this enemy can only be done at the end of the campaign, and gives access to a SECRET in front of the dead tree:
     def _facing_dead_tree(game_view, _GameView):
@@ -218,8 +222,8 @@ def script_it():
         btn_pos = Position(x=40, y=12)
         game_view.actions['LIGHT'] = _GameView(game_view.state.with_secret('DEAD_TREE')
                                                         # opening locked door to Cedar Village:
-                                                        .without_tile_override((4, 10, 15))
-                                                        ._replace(message=msg, hp=15,  # restoring HP
+                                                        # .without_tile_override((4, 10, 15))   unlock by spell
+                                                        ._replace(message=msg, hp=15, mp=1,  # restoring HP
                                                                   music=music, music_btn_pos=btn_pos))
     mapscript_add_trigger((4, 10, 12), _facing_dead_tree, facing='north', permanent=True,
                                        condition=lambda gs: 'BEEN_TO_VILLAGE' in gs.hidden_triggers and 'DEAD_TREE' not in gs.secrets_found)
@@ -239,6 +243,7 @@ def script_it():
     # - Cedar Arms:             make a great sword out of a rusty sword for 50$ / rumor about a secret in Zuruth Plains for free
     # - Simmons Fine Clothier:  boots to pass over shallow waters for 15$ / St Knight armor from armor parts
     # - Sage Therel             teach BURN spell in exchange for the scroll / teach UNLOCK spell later on, again in exchange for a scroll
+
 
     # Block exit to the plains; required to win: a night of rest
     def _post_1st_zombie_fight(gs, _):
@@ -613,18 +618,21 @@ def script_it():
         hp=100, rounds=(CR('Petrifying stare', atk=42),),
         post_victory=_unbelievable)
 
-    def _reflect_gorgon_or_loot_her_staff(game_view, _GameView):
+    def _reflect_gorgon_or_loot_her_staff_or_shopkeeper_message(game_view, _GameView):
         gs = game_view.state
         gorgon_state = gs.tile_override_at(gorgon_pos)
         has_staff_been_picked_up = gorgon_state == 54 # petrified_gorgon (without staff)
-        if gs.facing == 'north' and 'HAND_MIRROR' in gs.items:
+        if gs.facing == 'west' and 'HAND_MIRROR' in gs.items:
+            game_view.state = game_view.state._replace(message='The shopkeeper shouts\n"I can\'t risk letting\nthat gorgon in here!"')
+        elif gs.facing == 'north' and 'HAND_MIRROR' in gs.items:
             if not gs.extra_render:
                 game_view.actions['HAND_MIRROR'] = _GameView(gs._replace(
                         extra_render=lambda pdf: pdf.image('assets/gorgon-in-mirror.png', x=0, y=0)))
             else:
                 log(gs, 'reflecting-gorgon')
                 game_view.actions['REFLECT_GORGON'] = _GameView(gs
-                    .with_vanquished_enemy(gorgon_pos).with_tile_override(53, gorgon_pos)
+                    .with_vanquished_enemy(gorgon_pos)
+                    .with_tile_override(53, gorgon_pos).without_tile_override(VILLAGE_INN_COORDS)
                     ._replace(
                         message='The gorgon\npetrified\nherself!', msg_place=MessagePlacement.UP,
                         extra_render=lambda pdf: pdf.image('assets/gorgon-petrified-in-mirror.png', x=0, y=0),
@@ -637,7 +645,7 @@ def script_it():
                 .with_tile_override(54, gorgon_pos, exist_ok=True)
                 ._replace(items=gs.items + ('STAFF',), treasure_id=30,
                           message="You take\nthe gorgon's staff", msg_place=MessagePlacement.UP))
-    mapscript_add_trigger((5, 9, 8), _reflect_gorgon_or_loot_her_staff, permanent=True)
+    mapscript_add_trigger((5, 9, 8), _reflect_gorgon_or_loot_her_staff_or_shopkeeper_message, permanent=True)
 
     def _take_mirror(game_view, _GameView):
         gs = game_view.state
@@ -654,7 +662,8 @@ def script_it():
         if not is_instinct_preventing_to_pass_mausoleum_portal(gs): return
         msg = None
         if gs.items.count('ARMOR_PART') < 4:
-            msg = 'No need to go back until\nyou have all the armor parts'
+            # msg = 'No need to go back until\nyou have all the armor parts'
+            msg = 'The whispering wind\nsuggests there are more\narmor parts to find'
         elif not gs.tile_override_at(MAUSOLEUM_EXIT_COORDS):
             msg = 'The whispering wind\ntells you the key to this\ncrypt exit is in the books'
         assert msg, 'A hint should be given if the path is blocked'
@@ -691,16 +700,12 @@ def script_it():
 
     def _second_lever(game_view, _GameView):
         gs = game_view.state
-        if 'STAFF' in gs.items:
-            log(gs, 'placing-staff-in-slot')
-            game_view.actions['STAFF'] = _GameView(gs._replace(
-                    items=tuple(i for i in gs.items if i != 'STAFF'),
-                    message="You place the gorgon's staff\nin the mechanism slot\nand runes appear on the wall",
-                    puzzle_step=0, extra_render=RENDER_STAFF_PUZZLE[0]))
-            return
-        if gs.puzzle_step is not None:
+        if gs.tile_override_at(MAUSOLEUM_EXIT_COORDS):
+            game_view.state = game_view.state._replace(extra_render=RENDER_STAFF_PUZZLE[2])
+        elif gs.puzzle_step is not None:
             lever_angle_index = gs.puzzle_step % 10
             if not gs.extra_render:  # happens when moving to this tile from another one
+                assert False # game no longer preserves staff in slot, so this should never happen
                 assert gs.puzzle_step == 0, gs.puzzle_step
                 angle=0
                 if gs.tile_override_at(MAUSOLEUM_EXIT_COORDS):
@@ -708,11 +713,10 @@ def script_it():
                 game_view.state = game_view.state._replace(extra_render=RENDER_STAFF_PUZZLE[angle])
             if gs.puzzle_step == ROTATING_LEVER_CORRECT_SEQUENCE:
                 game_view.state = game_view.state.with_tile_override(5, MAUSOLEUM_EXIT_COORDS)._replace(
+                        items=tuple(i for i in gs.items if i != 'STAFF'),
                         message='You hear the iron gate\nrise behind you',
-                        puzzle_step=0, extra_render=RENDER_STAFF_PUZZLE[2])
+                        puzzle_step=None, extra_render=RENDER_STAFF_PUZZLE[2])
             gs = game_view.state
-            if gs.tile_override_at(MAUSOLEUM_EXIT_COORDS):
-                return  # Once puzzle is solved, TURN_LEVER_* actions should not be available anymore
             log(game_view.state, f'lever-sequence-{gs.puzzle_step}')
             # If the sequence of lever positions is correct so far, we propagate it:
             new_puzzle_step = 0
@@ -726,6 +730,12 @@ def script_it():
                     game_view.actions[f'TURN_LEVER_{i}'] = _GameView(gs._replace(message='',
                         puzzle_step=new_puzzle_step + i,
                         extra_render=RENDER_STAFF_PUZZLE[i]))
+        elif 'STAFF' in gs.items:
+            log(gs, 'placing-staff-in-slot')
+            game_view.actions['STAFF'] = _GameView(gs._replace(
+                    message="You place the gorgon's staff\nin the mechanism slot\nand runes appear on the wall",
+                    puzzle_step=0, extra_render=RENDER_STAFF_PUZZLE[0]))
+            return
     mapscript_add_trigger((8, 13, 7), _second_lever, facing='west', permanent=True)
 
     # CHECKPOINT: about to enter the Dead Walkways and fight the storm dragon, with the St Knight armor

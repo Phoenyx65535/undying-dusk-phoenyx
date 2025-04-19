@@ -32,7 +32,7 @@ def patch_shop(shop, shop_id):
         ])
     if shop.name == 'The Pilgrim Inn':  # shop 2 at Cedar Village
         return Proxy(background=shop.background, name=shop.name, item=[
-            ShopMessageItem('We saw dead walking\nfrom the Canal Boneyard.'),
+            PilgrimInnAdvice,
             RoomForTheNight,
         ])
     raise NotImplementedError(f'Shop not handled: {shop.name}')
@@ -560,6 +560,12 @@ class SageTherelSellableSpell:
             return DialogOption(btn_type=DialogButtonType.BUY, can_buy=False, msg="I can teach it to you\nif you bring me a scroll.")
         return DialogOption.only_msg('Use your new power\nwisely, young apprentice')
 
+class PilgrimInnAdvice:
+    @staticmethod
+    def dialog_option(game_state):
+        if not game_state.tile_override_at((5, 9, 3)):  # VILLAGE_PORTAL_COORDS
+            return DialogOption.only_msg('We saw dead walking\nfrom the Canal Boneyard.')
+        return DialogOption.only_msg("Thank you for taking\ncare of that Gorgon!") 
 
 class RoomForTheNight:
     @staticmethod

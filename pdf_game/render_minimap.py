@@ -68,7 +68,7 @@ def _get_prerendered_img(map_id, game_view):
                             icon_type = 'ENTITY'
                         elif current_tile == 15 or tile_id == 24:
                             icon_type = 'WATER'
-                        elif current_tile in {16,18,25,26,28}: #skull,locked_door,portcullises,portal_closed
+                        elif current_tile in {16,18,25,26,28,65}: #skull,locked_door,portcullises,portal_closed,medieval_locked_door
                             icon_type = 'BLOCKED'
                         elif current_tile in {3,11,27}: #door, medieval_door, portal_open
                             icon_type = 'EXIT'
