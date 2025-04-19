@@ -52,6 +52,9 @@ def dialog_render(pdf, game_view):
             x, y = 74, 38
             pdf.image('assets/take-crucifix.png', x=x, y=y)
             add_link(pdf, x, y, width=21, height=30, page_id=page_id, link_alt=option.btn_type.name.replace('_', ' '))
+        elif option.btn_type == DialogButtonType.TALK_WITH_MONK:
+            x, y = 0, 59
+            add_link(pdf, x, y, width=37, height=61, page_id=page_id, link_alt=option.btn_type.name.replace('_', ' '))
         else:
             button_id = getattr(dialog(), f'DIALOG_BUTTON_{option.btn_type.name}')
             assert button_id is not None, f'DIALOG_BUTTON_{option.btn_type.name}'
@@ -87,6 +90,11 @@ def dialog_render(pdf, game_view):
         pass
     try:
         _shop.extra_render(pdf)
+    except (AttributeError, KeyError, TypeError):  # 'NoneType' object is not callable:
+        pass
+
+    try:
+        game_view.state.extra_render(pdf)
     except (AttributeError, KeyError, TypeError):  # 'NoneType' object is not callable:
         pass
 

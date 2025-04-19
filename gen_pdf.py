@@ -53,9 +53,13 @@ def main():
     render_credit_pages(pdf, links_to_credits)
     print(f'Rendering of {len(pdf.pages)} pages took: {trace.time:.2f}s')
     assert not pdf._drawing_graphics_state_registry, "No /ExtGState are needed in Undying Dusk"  # pylint: disable=protected-access
+    if args.output_pdf:
+        output_name = args.output_pdf+'.pdf'
+    else:
+        output_name = 'undying-dusk.pdf'
     with trace_time() as trace:
         pdf.pdf_version = "1.3"  # Optimization: avoids 55bytes/page due to the transparency group
-        pdf.output('undying-dusk.pdf')
+        pdf.output(output_name)
     print(f'Output generation took: {trace.time:.2f}s')
     print_perf_stats()
     pdf.print_perf_stats()
@@ -74,6 +78,7 @@ def parse_args():
     parser.add_argument("--no-pdf", action="store_true", help=" ")
     parser.add_argument("--detect-deadends", action="store_true", help="Sanity check")
     parser.add_argument("--print-reduced-views", action="store_true", help=" ")
+    parser.add_argument("--output-pdf", type=str, help="output to specified pdf file (will add \".pdf\" for you)")
     return parser.parse_args()
 
 

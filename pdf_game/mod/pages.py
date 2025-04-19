@@ -59,6 +59,7 @@ def render_credit_pages(pdf, links_to_credits):
     with bitfont_color_red():
         bitfont_render(pdf, 'dedicated subreddit', 43, 95, url='https://www.reddit.com/r/UndyingDuskPdfGame/')
     bitfont_render(pdf, '-Lucas', 80, 105, Justify.CENTER)
+    white_arrow_render(pdf, 'NEXT', 140, 105, page_id=pdf.page+1)
 
     pdf.add_page()
     pdf.image(REL_RELEASE_DIR + 'images/backgrounds/black.png', x=0, y=0)

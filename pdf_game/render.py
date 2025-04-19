@@ -25,7 +25,7 @@ from .warp_portals import warp_portal_in_sight
 from .mod.world import patch_enemy_name, CLICK_ZONES
 
 
-TILES = ',dungeon_floor,dungeon_wall,dungeon_door,pillar_exterior,dungeon_ceiling,grass,pillar_interior,chest_interior,chest_exterior,medieval_house,medieval_door,tree_evergreen,grave_cross,grave_stone,water,skull_pile,hay_pile,locked_door,death_speaker,boulder_floor,boulder_ceiling,boulder_grass,sign_grass,fountain,portcullis_exterior,portcullis_interior,portal_interior,portal_interior_closed,dead_tree,dungeon_wall_tagged,well,dungeon_torch,box_interior,dungeon_bookshelf,dungeon_bookshelf_torch,box_exterior,hay_pile_exterior,statue,statue_with_amulet,fire,dungeon_wall_small_window,stump,stump_with_bottle,seamus_on_grass,seamus_on_floor,cauldron,dungeon_wall_with_ivy,dungeon_wall_lever_slot,dungeon_wall_lever_down,dungeon_wall_lever_up,dungeon_wall_lever_up_with_fish,dungeon_black_passage,petrified_gorgon_with_staff,petrified_gorgon,tree_alt'.split(',')
+TILES = ',dungeon_floor,dungeon_wall,dungeon_door,pillar_exterior,dungeon_ceiling,grass,pillar_interior,chest_interior,chest_exterior,medieval_house,medieval_door,tree_evergreen,grave_cross,grave_stone,water,skull_pile,hay_pile,locked_door,death_speaker,boulder_floor,boulder_ceiling,boulder_grass,sign_grass,fountain,portcullis_exterior,portcullis_interior,portal_interior,portal_interior_closed,dead_tree,dungeon_wall_tagged,well,dungeon_torch,box_interior,dungeon_bookshelf,dungeon_bookshelf_torch,box_exterior,hay_pile_exterior,statue,statue_with_amulet,fire,dungeon_wall_small_window,stump,stump_with_bottle,seamus_on_grass,seamus_on_floor,cauldron,dungeon_wall_with_ivy,dungeon_wall_lever_slot,dungeon_wall_lever_down,dungeon_wall_lever_up,dungeon_wall_lever_up_with_fish,dungeon_black_passage,petrified_gorgon_with_staff,petrified_gorgon,tree_alt,grave_stone_shield,grass_konami,dungeon_mirror,grave_stone_cross,grave_stone_pentacle,grave_stone_rip,grave_stone_writing,dungeon_boulder_hole,boulder_hole_boulder'.split(',')
 ARROW_BUTTONS_POS = {
     'TURN-LEFT': Position(x=98, y=8, angle=180),
     'TURN-RIGHT': Position(x=114, y=8, angle=0),
@@ -42,6 +42,10 @@ ARROW_LINK_WIDTH = 12
 ARROW_LINK_HEIGHT = 9
 MINIATURES_DIR_PATH = join(dirname(realpath(__file__)), '..', 'small_enemies')
 MINIATURES_ALREADY_GENERATED = set()
+SCALE_MAP = {2:0.36, 3:0.36, 4:0.36, 7:0.666, 8:0.666, 9:0.666}
+SCREEN_X_MAP = {2:12, 3:88, 4:50, 7:-36, 8:86, 9:25}
+SCREEN_Y_MAP = {2:38, 3:38, 4:38, 7:18, 8:18, 9:18}
+
 
 
 def render_page(pdf, game_view, render_victory):
@@ -58,7 +62,8 @@ def render_page(pdf, game_view, render_victory):
         with trace_time('render:0:dialog'):
             dialog_render(pdf, game_view)
         return
-    bitfont_set_color_red(game_state.hp <= game_state.max_hp/3)
+    if game_state.combat or game_state.mode == GameMode.INFO:
+        bitfont_set_color_red(game_state.hp <= game_state.max_hp/3)
     with trace_time('render:1:mazemap'):
         mazemap_render(pdf, game_view)
     if game_state.combat:
@@ -107,7 +112,6 @@ def render_page(pdf, game_view, render_victory):
                                page_id=next_game_view.page_id)
             elif action_name == 'CLOSING-BOOK':
                 assert game_state.book
-                bitfont_set_color_red(False)
                 render_book(pdf, game_state.book, next_game_view.page_id, game_state.treasure_id)
             elif action_name in CLICK_ZONES:
                 click_zone = CLICK_ZONES[action_name]
@@ -168,11 +172,11 @@ def mazemap_render_tile(pdf, game_view, dx, dy, render_pos):
         # Extra rendering in case of a boulder one tile further:
         if game_view.tile_override((map_id, *next_pos_facing)) in (20, 21, 22):
             pdf.image('assets/boulder_small.png', x=68, y=48)
-    if render_pos == 9:  # center of middle row
+    if render_pos in {2,3,4,7,8,9}:  # locations to render enemies
         _enemy = mapscript_get_enemy_at((map_id, x, y), game_view.state)
         # Rendering enemy on map:
         if _enemy and _enemy.show_on_map and not game_view.enemy_vanquished((map_id, x, y)):
-            enemy_render_small(pdf, _enemy)
+            enemy_render_small(pdf, _enemy, SCALE_MAP[render_pos], SCREEN_X_MAP[render_pos], SCREEN_Y_MAP[render_pos])
 
 
 def action_render(pdf, spellbook, items):
@@ -249,10 +253,13 @@ def enemy_render(pdf, combat, sfx=None):
         sfx_render(pdf, sfx)
 
 
-def enemy_render_small(pdf, _enemy, scale=2/3):
-    small_img_filepath = f'assets/enemies/small/{_enemy.name}.png'
+def enemy_render_small(pdf, _enemy, scale, x, y): #old defaults: scale = 2/3, x = 25, y = 18
+    name = _enemy.name
+    if scale < 0.5:
+        name = name + "_small"
+    small_img_filepath = f'assets/enemies/small/{name}.png'
     if not exists(small_img_filepath):  # fallback to auto-generated miniature:
-        small_img_filepath = f'{MINIATURES_DIR_PATH}/{_enemy.name}.png'
+        small_img_filepath = f'{MINIATURES_DIR_PATH}/{name}.png'
         if small_img_filepath not in MINIATURES_ALREADY_GENERATED:
             makedirs(MINIATURES_DIR_PATH, exist_ok=True)
             width, height = config().VIEW_WIDTH, config().VIEW_HEIGHT
@@ -262,7 +269,7 @@ def enemy_render_small(pdf, _enemy, scale=2/3):
                    .resize((round(width*scale), round(height*scale)), resample=NEAREST)\
                    .save(small_img_filepath)
             MINIATURES_ALREADY_GENERATED.add(small_img_filepath)
-    pdf.image(small_img_filepath, x=25, y=18)
+    pdf.image(small_img_filepath, x=x, y=y)
 
 
 def _enemy_img_filepath(_enemy):

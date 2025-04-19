@@ -245,7 +245,7 @@ class GameState(NamedTuple):
     items: Tuple[str] = ()
     hidden_triggers: Tuple[str] = ()
     puzzle_step: Optional[int] = None
-    rolling_boulder: Optional[RollingBoulder] = None
+    rolling_boulders: Tuple[RollingBoulder] = ()
     triggers_activated: Tuple[Tuple[int]] = ()  # sequence of coords
     # Tile-transient state:
     mode: GameMode = GameMode.EXPLORE
@@ -334,6 +334,7 @@ class DialogButtonType(IntEnum):
     DRINK_RED = 4
     DRINK_GREEN = 5
     TAKE_CRUCIFIX = 6
+    TALK_WITH_MONK = 7
     def action_name(self, index):
         if self in (self.BUY, self.NONE):
             return f'{self.name}_{index}'
