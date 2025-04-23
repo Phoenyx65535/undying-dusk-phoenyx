@@ -265,7 +265,7 @@ def the_inn_evening_tale():
     tale_2 = CutScene.new(
         name='The inn evening tale',
         background='st_knight_tale_2',
-        text='\n' * 18 + 'A storm dragon.\nViolence. Death. Terror.\nA relentless scourge\nupon us.',
+        text='\n' * 18 + 'The storm dragon.\nViolence. Death. Terror.\nA relentless scourge\nupon us.',
         next_scene_id=tale_3.id,
     )
     return CutScene.new(

@@ -331,7 +331,7 @@ def script_it():
     def _place_amulet_on_statue(game_view, _GameView):
         game_view.actions['AMULET'] = _GameView(game_view.state
                 .with_tile_override(39, coords=(6, 9, 4))
-                ._replace(message='You feel an inner warmth\nas you receive\nthe templar blessing\n(MP & max MP up!)',
+                ._replace(message='You feel an inner\nwarmth as you receive\n\n\nthe templar blessing\n(MP & max MP up!)',
                           mp=game_view.state.mp + 2, max_mp=game_view.state.max_mp + 2,
                           items=tuple(i for i in game_view.state.items if i != 'AMULET'),
                           music=BASE_MUSIC_URL + 'AlexandrZhelanov-ADarknessOpus.ogg',
@@ -421,7 +421,9 @@ def script_it():
 
     def _examine_glimpse(game_view, _GameView):
         game_view.actions['GLIMPSE'] = _GameView(game_view.state._replace(message='A voice comes\nfrom the water:\n\n"There is a shortcut\nto the Mausoleum entrance\nabove the fire."'))
-    mapscript_add_trigger((7, 4, 9), _examine_glimpse, facing='west', permanent=True)
+    def _no_text_present(game_state):
+        return game_state.message == ''
+    mapscript_add_trigger((7, 4, 9), _examine_glimpse, facing='west', permanent=True, condition=_no_text_present)
 
     cauldron_pos = (7, 13, 5)
     def _shortcut_above_fire_and_cauldron(game_view, _GameView):

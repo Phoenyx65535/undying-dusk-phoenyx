@@ -1,0 +1,196 @@
+Phoenyx's Changes:
+
+Added views from other angles:
+assets/tiles/boulder_ceiling.png : boulder images added for other angles
+assets/tiles/boulder_floor.png : boulder images added for other angles
+assets/tiles/boulder_grass.png : boulder images added for other angles
+assets/tiles/dead_tree.png : tree images added for other angles
+assets/tiles/dungeon_bookshelf_torch.png : bookshelf images added for other angles
+assets/tiles/petrified_gorgon.png : gorgon image added from other angles (it doesn't look great, as it looks very flat, but I think it's better than having nothing there)
+assets/tiles/petrified_gorgon_with_staff.png : gorgon image added from other angles
+assets/tiles/portal_interior.png : portal image added from other angles
+assets/tiles/portal_interior_closed.png : portal image added from other angles
+assets/tiles/dungeon_wall_lever_down.png : merged my version with Lucas's taking the best of both
+assets/tiles/dungeon_wall_lever_up.png : merged my version with Lucas's taking the best of both
+assets/tiles/dungeon_wall_lever_slot.png : merged my version with Lucas's taking the best of both
+assets/tiles/dungeon_wall_lever_up_with_fish.png : merged my version with Lucas's taking the best of both
+assets/tiles/dungeon_wall_small_window.png : merged my version with Lucas's taking the best of both
+assets/tiles/well.png : well images added for other angles (also recolored, see below)
+
+Other minor graphical fixes:
+assets/tiles/statue_with_amulet.png : the statue was sunk into the floor slightly.  I moved it back up
+assets/tiles/statue.png : there were slight differences between our far distance sprites, so I changed to mine to match statue_with_amulet.png
+assets/tiles/well.png : well had blue tint to it, which clashed with the environments it was put in.  I recolored it to look more red (within the palette)
+
+assets/tiles/locked_door2.png : The heroine-dusk version had the wrong door color in the distance (and it didn't contrast well with the wall color), so I fixed it to match dungeon_door
+assets/tiles/grass2.png : very slight change, a pixels of dirt poked past the edge in a few places and would show up when water was behind it
+assets/tiles/tree_evergreen2.png : same as for grass
+assets/tiles/water2.png : the heroine-dusk version had some misalignment errors leading to weird streaks in the mausoleum puddles
+
+
+Minor wording tweaks:
+pdf_game/mod/books.py : in the monastery library the leftmost book on the back wall said "the storm dragon is", but people believed the dragon slain, so I changed it to "was"
+pdf_game/mod/books.py : in the monastery library the middle book on the back wall said "bring dead people back to life"; I think more powerful wording is "bring the dead back to life"
+pdf_game/mod/books.py : changed the wording in the bird drawing book to sound more natural
+pdf_game/mod/campaign.py : changed the amulet description to call it "dull" instead of "bright" because it needs to be re-blessed
+pdf_game/mod/campaign.py : when amulet is blessed, changed to say "templar blessing".  "templars's" is a strange wording.  "templar's" would be ok, but implies blessed by a templar.  I also rearranged the text so you can see the amulet in the statue's hand right away.
+pdf_game/mod/campaign.py : reworded message when you get the saint knight's sword (to say it belonged to the saint knight would need the 's after it)
+pdf_game/mod/campaign.py : in the final fight, when the empress gets healed by Dominik, I had her call out to be healed, rather than simply stating she is healed
+pdf_game/mod/campaign.py : fixed a grammar typo in the hint that you need better armor to fight the dragon
+pdf_game/mod/scenes.py : removed "Chapter 1" from the first conversation with Seamus, since there aren't any other chapters
+pdf_game/mod/scenes.py : In conversation with Seamus after the monastery, he said "Empress" when it should be "Empress's"
+pdf_game/mod/scenes.py : after the fight with the skeleton on the bridge, Seamus says "Will you walk in the Saint Knight footsteps?" changed to "Saint Knight's"
+pdf_game/mod/scenes.py : The abyss bottom said "The empress soul's".  I changed it to "The soul of the empress"
+pdf_game/mod/scenes.py : when you get the repaired armor, it said "Acquired Saint Knight armor", which I changed to "Acquired the Saint Knight's armor"
+pdf_game/mod/scenes.py : slightly reworded the scene when you enter the dead walkways
+pdf_game/mod/scenes.py : fixed a typo in the final cutscene ("lisps")
+pdf_game/power.py : changed wording when you pick up the scepter at the end to "scepter taken"
+pdf_game/mod/scenes.py : in the inn cutscene, it said "a storm dragon" came, but other wordings have called it "the storm dragon", so I changed that to match
+pdf_game/mod/books.py : In the templar adademy, they say the statue is of the "guarding lady", while Seamus calls her "guardian lady".  I changed the book to "Guardian" to match
+
+
+Amulet hints:  I felt there wasn't enough hinting to discover the amulet in the canal.  I added a bit of lore that when a templar dies, they place their amulet in the canal, and that a templar has recently been killed.
+pdf_game/mod/books.py : added book to the one empty bookshelf in the monastery.  Text hints that a templar died recently.
+pdf_game/mod/books.py : added second page to the book in the templar academy about the amulets and the statue, indicating that they give the wearer power
+pdf_game/mod/books.py : reworded first page of the book in the templar academy introducing the amulets, added second page hinting that amulets are put in the canal during funerals
+pdf_game/mod/campaign.py : because I added a named dead templar, I shifted the hint for where to pray in the boneyard to say it is the grave of that dead templar (also, elsewhere it says the saint knight was buried in the mausoleum, so it wouldn't be his grave)
+pdf_game/mod/scenes.py : Removed Seamus's hint to look in the canal (since now there is a hint in the books in the templar academy)
+
+
+Walking in the fountain:  The boots let you walk in shalow water, which I felt would include the fountain, so I made it so that you could do so.
+pdf_game/mod/world.py : made it so you can walk through the fountain if you have the boots that let you walk through water
+assets/tiles/fountain.png : fountain image added for on your space when you are standing in it
+pdf_game/mod/info.py : Since I made it so you can walk in the fountain, now you throw the coin in while standing right in it.
+
+
+Monk alternate flow:  During my playthrough I was very sad having to curse the monk, so I added an alternate way to get holy water.  If you notice their sillhouette in the chapel, you can actually talk to them.  They offer to bless water if you bring them some.  Now, you can bring them plain water in the bottle and they will bless it for you.  The flags for this are thrown away when you enter town, so it has little bearing on number of pages.
+assets/backgrounds/chapel_empty.png : added monk silhouette (to click on to talk to them)
+pdf_game/entities.py : added button id for clicking on the monk
+pdf_game/render_dialog.py : added button for talking to the monk (and something for extra_render that may or may not have ended up being used)
+pdf_game/mod/campaign.py : added hidden trigger tracking whether the player has filled the bottle at the well (not holy water, but regular water)
+pdf_game/mod/scenes.py : redid the chapel_in_the_woods shop for the new plot.  If you talk instead of steal, offers to bless your water for you
+pdf_game/mod/campaign.py : added commentary from the whispering wind just before the entrance to down depending on whether you curse the monk
+
+
+Mirror changes:  The pile of hay in the mausoleum forced you to stand in it for two pages in order to get both the mirror and the key.  This felt arbitrary and also annoying that you wouldn't find both at first.  I changed it so that there is a secret wall there with a mirror on it, and you open it by removing the mirror (adding it to your inventory), and then find the blue key in the pile behind the secret wall.
+assets/tiles/dungeon_mirror.png : tile for the mirror on the wall that opens the secret cubby
+pdf_game/mod/campaign.py : Added trigger to take the mirror from the secret wall
+pdf_game/mod/world.py : added CLICK_ZONE for taking the mirror off the new secret wall
+pdf_game/mod/campaign.py : removed the mirror from the hay bale (it is now on the wall)
+pdf_game/mod/world.py : changed mirror hay pile to mirror on the wall.  when you take the mirror, the hay pile for the blue key replaces it
+
+
+Help finding the grave to pray at:  The sign hints that you should pray at a grave, but there was no way to know which one.  I made the praying-grave look different from the rest.  Now, the sign shows the crest of the dead templar, and that is also on his grave.  In order to not make that grave stand out too much, I also added carvings on all the graves (the others can have any of: cross, "RIP", lines of text, or a pentacle).
+assets/extra_treasure.png : added coat-of-arms icon
+pdf_game/mod/campaign.py : added crest icon to the hint to pray at the grave
+pdf_game/mapscript.py : added "extra_render" parameter to mapscript_add_message (used to put the crest icon in the hint to pray at the grave)
+pdf_game/mod/campaign.py : added import of treasure_render_item (used to put the crest icon in the hint to pray at the grave)
+assets/tiles/grave_stone_shield.png : one of 5 variants on grave stones.  This one is only used for the grave you pray at
+assets/tiles/grave_stone_cross.png : one of 5 variants on grave stones
+assets/tiles/grave_stone_pentacle.png : one of 5 variants on grave stones
+assets/tiles/grave_stone_rip.png : one of 5 variants on grave stones
+assets/tiles/grave_stone_writing.png : one of 5 variants on grave stones
+pdf_game/mod/world.py : changed the look of the graves so you can tell which grave is the one to pray at (but only if you know what to look for)
+pdf_game/mod/world.py : made the graves around the empress have things on them, like the other graves
+
+
+Revamping skeleton fight:  To a new player, it was not clear that you would always get a critical hit on the 5th turn.  To help this, I added a book suggesting you can critical hit when an enemy loses their footing, and animated the skeleton so it "looses its foot" (lol) on the 4th turn.  Now, the skeleton loses a part of its body every turn, colapses into a pile of bones if killed, and a pile of bones on fire if killed with the fire spell.
+pdf_game/mod/books.py : added a book in the templar treasure room hinting you can get a critical hit after an opponent loses their footing
+assets/enemies/skeleton.png : added steps for the skeleton to fall apart
+pdf_game/mod/campaign.py : changed the sprites for the skeleton fight in the plains.  Now he falls apart as the fight goes on
+pdf_game/power.py : changed critical hits to always do double-damage, which is easier to understand
+
+
+Boulder changes:  after the templar boulder rolls at you, I wanted to be able to push it to the side to open the door back up, so I made it so the side entrance locks behind you, and you have to push the boulder to the side to get out.  To enforce that you can only roll it one way (to limit pages), I had a second boulder roll in from the side.  This required adding functionality for multiple boulders.  I also decided to add a ceiling over the secret library because you wouldn't want the books rained on or to have people sneak in from the roof.
+pdf_game/mod/campaign.py : going in the back entrance to the templar academy the door remains locked (it says it locks behind you).  You now get out by pushing a boulder
+pdf_game/explore.py : added functionality for pushing boulders if they are not actively rolling.  
+pdf_game/mapscript.py : adjusted the boulder scripts to allow for multiple boulders.  also allowed the trigger to have additional conditions
+pdf_game/entities.py : changed rolling_boulder to a tuple to allow multiple boulders at once, 
+assets/tiles/dungeon_boulder_hole.png : tile for hole in the ceiling of the library where the boulder falls through (relevant since I was adding a roof)
+assets/tiles/boulder_hole_boulder.png : the boulder is directly under the hole for 1 step
+pdf_game/mod/campaign.py : moved the treasure in the templar treasure room so you can barely see it next to the boulder
+pdf_game/mod/world.py : added roof over the secret library to keep the books safe.  Added the boulder_hole tile.  added bookcases where the pillars were to have the book added for the skeleton fight hint (plus another bookcase for symmetry)
+pdf_game/mod/books.py : Added text for this additional bookcase so there wasn't a bookcase with no book
+
+
+Minimap changes:  I wanted a bit more detail for the minimaps, so I tweaked it to have a darker icon for blocked/locked doors, red icons for enemies, and yellow icons for Seamus.  This meant also changing the format for the map filenames to distinguish when doors are unlocked, disappear, enemies die, etc.
+pdf_game/render_minimap.py : changed the minimaps as described above.  Also show the fountain as blue
+pdf_game/mod/scenes.py : I changed the format for minimap file names, so I changed the filename for the tutorial map
+pdf_game/mod/campaign.py : added condition to the shadow_soul so it doesn't show up on the map when returning to get the secret at the tree after killing it to get there
+pdf_game/mod/world.py : added portcullis to the east exit from the plains.  this is in part to make it show up as a door
+pdf_game/mod/campaign.py : when you kill the town zombie, it adds an override to open the portcullis from the plains to the bone canal.  This allows the minimap to show a door there
+pdf_game/mod/world.py : put a door at the entrance to the templar academy maze to make it show up on the map as more enticing
+pdf_game/mod/campaign.py : when you enter the mausoleum proper, all 3 portcullises drop.  This also helps to show them as blocked doors on the minimap
+pdf_game/mod/world.py : initially removed portcullises in the mausoleum so when they are opened after they close, they don't show up on the map
+pdf_game/mod/campaign.py : in the dead walkways, when the portcullises closed behind you, the enemies/blocks would respawn.  I instead reset it to them being gone (except the kind druid!)
+
+
+Walking backward:  I noticed there were a few strange behaviors when walking backwards that I wanted to fix up
+pdf_game/explore.py : added functionality for some doors to preserve whether you are walking forward or backward into the door (depending on which would be less disorienting)
+pdf_game/shop_dialog.py : added the ability for a shop to change the direction you are facing (I think this was for seamus)
+pdf_game/mod/scenes.py : changed the exit lists to have more consistent facing behavior when you walk backwards into something
+pdf_game/mod/world.py : made it so when you walk backwards through a door (mostly, when you realize you didn't want to go through it and back up), it doesn't flip you around
+pdf_game/mod/world.py : moved exit from mausoleum to boneyard a little left so you can walk right back out if you want
+pdf_game/mod/world.py : moved exit from boneyard to mausoleum a little right so you can walk right back in after exiting if you want
+pdf_game/explore.py : allow player to step backwards into enemy, turning them around to face enemy.  
+pdf_game/explore.py : Also fixed issue where player couldn't back up to where an enemy will be in the future.  
+
+
+Page reducing changes:  On the whole, there were quite a few times when I went to go somewhere that the game stopped me in a way that felt abrupt and like it was just telling me what to do.  I removed many of the contrived-feeling locks and only increased the page count about 25%.  I really wanted to be able to go back to town to get the fire spell before getting the amulet, and to revisit the templar academy whenever desired, so I fully removed those two locks, costing around +15k pages.  For the times when the portal was locked, I very much wanted to be able to leave the staff with the Gorgon and to return to town without having opened the gate to the dead walkways.  I found ways to limit the other page explosions in more natural ways: I made it so that the Innkeeper won't let you in to rest until you kill the Gorgon (out of fear), and I made it so if you insert the staff in the slot but don't solve the combination, you keep the staff in your inventory, effectively pulling it back out of the slot and taking it with you.  This means when you come back to enter the code later, you do have to reinsert it, but that wasn't much effort and saved -17k pages.  I also had the door back to town from the tree remain locked but the tree gives you +1mp to unlock it.  Functionally equivalent, but feels a lot more natural.
+assets/tiles/medieval_locked_door.png : tile for when the inn is locked in fear of the gorgon
+pdf_game/mod/books.py : when creating the portal, locks the inn door (for fear of the gorgon)
+pdf_game/mod/campaign.py : made the inn require you to kill the gorgon before you can rest (with shopkeeper shouting a message at you through the locked door)
+pdf_game/mod/scenes.py : added comment from the innkeeper thanking you for beating the gorgon
+pdf_game/mod/campaign.py : made it so the staff only leaves your inventory when you are done with the code.  you have to reinsert if you walk away, but this cuts down pages significantly
+pdf_game/entities.py : changed puzzle_step to not track whether the staff has been put in the slot (you take the staff out when you leave without solving it)
+pdf_game/explore.py : fixed info screen interfacing strangely with the staff puzzle (I think)
+pdf_game/mod/campaign.py : removed the lock on the portal from town to the mausoleum, and reduced the mausoleum to town lock to only be for when you have 1 but not all mimics killed
+pdf_game/mod/campaign.py : reworded the message for the remaining mimic lock to be from the whispering wind
+pdf_game/mod/world.py : made the instinct no longer prevent you traveling in most cases (now just mimics).  This doesn't cost a lot of pages, but makes the game feel much more natural
+pdf_game/mod/campaign.py : (note: because I removed many of these locks, the door hints do not show up for anything other than the mimics)
+pdf_game/mod/campaign.py : removed a couple checkpoints in the mausoleum because I left the passage open, so it wasn't a bottleneck
+pdf_game/mod/world.py : made the door from the plains to town start locked (but immediately overriden) so you can later cast unlock to open it
+pdf_game/mod/campaign.py : changed the lock on the cedar village door to be locked at first, but overridden at the start of the game.  This allows unlocking it by spell
+pdf_game/mod/campaign.py : added text saying the shadow soul locks the door behind you
+pdf_game/mod/campaign.py : made the dead tree give you 1 mp so you can unlock the door by spell
+
+
+New tiles:
+pdf_game/ascii.py : added lines for new tiles (grave_stone_shield, grass_konami, dungeon_mirror, grave_stone_cross, grave_stone_pentacle, grave_stone_rip, grave_stone_writing, dungeon_boulder_hole, boulder_hole_boulder, medieval_locked_door) 
+pdf_game/mod/world.py : added walkability for the 10 new tiles
+pdf_game/render.py : added 10 new tiles to the list
+
+
+Other minor changes:
+gen_pdf.py : added command line option to generate the pdf in a different file name (often used to name test compiles)
+pdf_game/mod/pages.py : added arrow in the credits to advance to the second page (previously, there was nothing to indicate there was a second page)
+pdf_game/render.py : added rendering of enemies from further distances (this includes changing enemy_render_small to take parameters for size/location)
+pdf_game/render.py : made it so red text for low hp only affects combat text and info screen text (e.g. doesn't color location titles), removed the now redundant removing red for books
+pdf_game/mod/scenes.py : made it so the cutscene when you leave the monk quarters only plays once
+pdf_game/mod/world.py : made the door back to the monastery visibly locked (locked_door)
+pdf_game/power.py : fixed the bug that when you throw your empty bottle, it stays in your inventory
+pdf_game/mod/campaign.py : started the boulder in cedar village 1 space closer.  this makes it so you only just barely make it out, with you getting to see the boulder almost run you down
+pdf_game/mod/campaign.py : added text to the zombie bite and druid life drain attacks to make it clearer they heal
+pdf_game/mod/books.py : in the book in the templar academy talking about the empress and the occult, I changed the pentacle to be inverted, which is more often associated with dark magic
+assets/small-inverted-pentacle.png : added small version of the inverted pentacle
+pdf_game/mod/campaign.py : Your fix to remove SHORTCUT_HINT made it so the icon in the river still shows behind the text.  I added a condition so it hides when there is text
+pdf_game/mod/world.py : changed mausoleum entrance back to a door so you don't see the ivy wall when exiting backwards (also Mausoleums usually have doors)
+pdf_game/mod/campaign.py : added a version of the ABYSS_BOTTOM trick for if you already found the secret ("Only silence remains")
+pdf_game/mod/campaign.py : raised fish goblin's health so they don't die if you attack (they kill you and remain there)
+pdf_game/mod/campaign.py : Added "Yummy fish!" to the flee text for the fish goblin.  It seemed weird that the one time he didn't say that was when he got the fish.
+pdf_game/mod/campaign.py : made it so when you unlock the door in the mausoleum with the blue key, it becomes an unlocked door, rather than removing the door entirely
+pdf_game/mod/books.py : reworded the book that hints about the song lyrics to also hint that the gorgon's staff is needed
+pdf_game/mod/books.py : changed condition for adding the portal GameView.  This has no real effect, but fixed a bug due to other changes I made
+pdf_game/mod/campaign.py : changed condition to determine if gorgon staff has been picked up to if the tile override is the gorgon statue without the staff.  this fixed a bug I introduced
+pdf_game/mod/scenes.py : Made Sage Therel complement you on the portal as soon as you talk to him when revisiting, rather than only after you buy the new spell
+pdf_game/mod/scenes.py : added some dialogue with the villagers when you return to town by portal to make them feel more alive
+pdf_game/mod/campaign.py : made the treasure chest mimic's tongue appear both when approaching from the north and from the south
+pdf_game/combat.py : indented text saying you got armor from the mimic to avoid overlap with other text
+pdf_game/render.py : I liked the old position of the music icon in the book with the song-code, and I had a different fix that preserved its location, so I switched to my fix
+pdf_game/mod/campaign.py : made it so when you are done inputting the code to get to the dead walkways, the staff remains pointing right.  this way it doesn't jump back up disorientingly
+pdf_game/mod/campaign.py : refactored the dragon fight so when you cut off part of it, it does a ton more damage (strategically, the fight is identical, it just feels better)
+pdf_game/mod/campaign.py : made dragon, druid in the dead walkways, and shadow soul give you gold when you kill them.  that doesn't affect gameplay, just makes it feel less unusual
+pdf_game/power.py : made it so when you attack the goblin that runs away, it says he dodges, rather than you dealing damage
+assets/tiles/grass_konami.png : circle of mushrooms to hint to do something here (use konami code)
+pdf_game/mod/world.py : replaced tiles in front of the empress with grass that has a mushroom ring on it, hinting to do something there
+pdf_game/mod/konami.py : adjusted the words shown so it builds up to "Konami Code" rather than resetting in the middle and saying it when you aren't quite done.  I also reworded the final message so it doesn't say you feel empowered (because it doesn't give you any strength/healing/etc)

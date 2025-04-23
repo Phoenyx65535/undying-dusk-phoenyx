@@ -163,6 +163,10 @@ def mazemap_render_tile(pdf, game_view, dx, dy, render_pos):
         return
     img_filepath = (REL_RELEASE_DIR + f'images/tiles/{tile}.png') if tile_id < 20 else f'assets/tiles/{tile}.png'
     if tile_id == 16: img_filepath = 'assets/tiles/skull_pile2.png'
+    if tile_id == 18: img_filepath = 'assets/tiles/locked_door2.png'
+    if tile_id == 6: img_filepath = 'assets/tiles/grass2.png'
+    if tile_id == 12: img_filepath = 'assets/tiles/tree_evergreen2.png'
+    if tile_id == 15: img_filepath = 'assets/tiles/water2.png'
     draw_area = _DRAW_AREAS[render_pos]
     # relies on: https://github.com/reingart/pyfpdf/pull/158
     with pdf.rect_clip(x=draw_area.dest_x, y=draw_area.dest_y, w=draw_area.width, h=draw_area.height):
@@ -317,8 +321,6 @@ def render_book(pdf, book, page_id, treasure_id):
             sfx_render(pdf, book.sfx)
         if book.treasure_id:
             treasure_render_item(pdf, book.treasure_id, Position(x=86, y=76))
-        if book.music:
-            action_button_render(pdf, 'MUSIC', url=book.music, btn_pos=Position(65, 14))
         if book.bird_index is not None:
             link = link_from_page_id(pdf, page_id)
             x, y = 80, 60
@@ -327,6 +329,8 @@ def render_book(pdf, book, page_id, treasure_id):
     bitfont_render(pdf, book.text, 80, y, Justify.CENTER, page_id=page_id)
     if book.extra_render:
         book.extra_render(pdf)
+    if book.music:
+        action_button_render(pdf, 'MUSIC', url=book.music, btn_pos=Position(24, 45))
     if book.next:
         white_arrow_render(pdf, 'NEXT', x=120, y=100, page_id=page_id)
 

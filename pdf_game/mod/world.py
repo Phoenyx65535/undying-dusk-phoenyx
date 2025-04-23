@@ -420,7 +420,6 @@ def _patch_exits(_map):
         return [_set_exit_facing(_map.exits[0])]
     if _map.name == "Monastery Trail":
         return [
-           # _set_exit_facing(_map.exits[0]), #to monastery (for map reasons.......I don't think I need this anymore)
            _set_exit_facing(_map.exits[1])
         ]  #
     if _map.name == "Cedar Village":
@@ -433,7 +432,6 @@ def _patch_exits(_map):
         return [
             _set_exit_facing(_map.exits[0]),  # to Cedar Village
             # _set_exit_facing(_map.exits[1], 'east'),   # to Canal Boneyard (unused due to "risking_it_all" CutScene)
-            # Proxy(exit_x=15, exit_y=7, dest_map=7, dest_x=2, dest_y=5, facing='SAME'), # canal exit, never used, just for map..... not needed anymore
             _set_exit_facing(_map.exits[2]),  # to Trade Tunnel
             Proxy(exit_x=14, exit_y=15, dest_map=10, dest_x=7, dest_y=4, facing='TURN-RIGHT'),  # to Trade Tunnel through side door
         ]

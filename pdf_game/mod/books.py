@@ -18,8 +18,8 @@ BOOKS = {
     (3, 4, 3): Book('...demons hide in hesitations,\nin fractions of seconds\nwhere our moral compass\nis adjusting,', img='assets/demons-of-time.png', next=Book('...and there is still\na potentiality that we\ncommit something horrible.\nIf time froze\nin those instants,\nour flesh would open up\nto terrible monsters...')),  # right row, bottom bookshelf
 
     # Templar Academy: first 2 bookshelves
-    (10, 0, 1): Book('The guarding lady\nis a famous mythical figure.\nTemplar apprentices would\ntake their vow by kneeling\nbefore her statue and\nplacing their trainee\namulet in her hand.', next=Book('In return, the guarding lady\ngives them her blessing.\nIt is this blessing that\ngives the templars their\nmagical power.')),
-    (10, 0, 3): Book('During all their\ntraining, young templars\nwear a sapphire amulet,\nsymbolizing the moral purity\nthey are trying to embody.\n\n', treasure_id=12, next=Book('When a templar is slain in\nbattle, their recovered\namulet is placed in the\ncanal during their funeral.')),
+    (10, 0, 1): Book('The guardian lady\nis a famous mythical figure.\nTemplar apprentices would\ntake their vow by kneeling\nbefore her statue and\nplacing their trainee\namulet in her hand.', next=Book('In return, the guardian lady\ngives them her blessing.\nIt is this blessing that\ngives the templars their\nmagical power.')),
+    (10, 0, 3): Book('Throughout their\ntraining, young templars\nwear a sapphire amulet,\nsymbolizing the moral purity\nthey are trying to embody.\n\n', treasure_id=12, next=Book('When a templar is slain in\nbattle, their recovered\namulet is placed in the\ncanal during their funeral.')),
     # Templar Academy: next 4 bookshelves
     (10, 0, 5): Book('The Saint Knight was\nmurdered in his sleep\nby a cabal of druids\njealous of his influence.\n',
                     img='assets/tomb-stone.png', next=Book('Following a grand funeral,\nhis body and armor were\nburied in the Mausoleum,\nwhile his sword was hidden\nin the Templar Academy maze.')),
@@ -37,7 +37,7 @@ BOOKS = {
     (10, 1, 15): Book('An encyclopedia mentions\na sorcerer thief that\nmastered a spell to unlock\nall doors & chests...', img='assets/open-chest-and-treasure.png'),
     (10, 2, 15): Book('The secret of the Saint\nKnight\'s victory over the\nStorm Dragon was\nhis armor: it was made\nof electric-proof steel.\n\n', sfx=SFX(id=5, pos=Position(64, 88))),
     (10, 3, 14): Book('Sword fighting strategy:\n\nCausing your opponent to\nlose their footing opens\nthem up to a critical strike.\nMake sure to strike true.'),
-    (10, 3, 13): Book('placeholder T_T'),
+    (10, 3, 13): Book('This book contains a\nrecord of all the\nTemplars buried in\nthe nearby cemetary.', next=Book('It goes back all\nthe way to the\nfounding of the empire.')),
 
     # Mausoleum: 2 bookshelves next to portal
     (8, 3, 13): Book('A treatise on\nDruidic linguistics.\nThe first chapter teaches\nthe names of numbers.',
