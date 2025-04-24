@@ -63,22 +63,24 @@ def render_credit_pages(pdf, links_to_credits):
 
     pdf.add_page()
     pdf.image(REL_RELEASE_DIR + 'images/backgrounds/black.png', x=0, y=0)
-    bitfont_render(pdf, 'CREDITS', 80, 5, Justify.CENTER)
+    y = 5
+    bitfont_render(pdf, 'CREDITS', 80, y, Justify.CENTER)
     white_arrow_render(pdf, 'BACK', 140, 3, page_id=pdf.page - 1)
 
-    bitfont_render(pdf, 'Game made by', 80, 20, Justify.CENTER)
+    y+=15; bitfont_render(pdf, 'Game made by', 80, y, Justify.CENTER)
     with bitfont_color_red():
-        bitfont_render(pdf, 'Lucas Cimon (2020)', 80, 30, Justify.CENTER, url='https://chezsoi.org')
+        y+=10; bitfont_render(pdf, 'Lucas Cimon (2020)', 80, y, Justify.CENTER, url='https://chezsoi.org')
+        y+=10; bitfont_render(pdf, 'This mod by: Phoenyx', 80, y, Justify.CENTER, url='https://www.reddit.com/user/Phoenyx65535/')
 
-    bitfont_render(pdf, 'Original game', 80, 45, Justify.CENTER)
+    y+=15; bitfont_render(pdf, 'Original game', 80, y, Justify.CENTER)
     with bitfont_color_red():
-        bitfont_render(pdf, 'Heroine Dusk', 80, 55, Justify.CENTER, url='http://heroinedusk.com')
-        bitfont_render(pdf, 'by Clint Bellinger (2013)', 80, 65, Justify.CENTER, url='http://clintbellanger.net')
+        y+=10; bitfont_render(pdf, 'Heroine Dusk', 80, y, Justify.CENTER, url='http://heroinedusk.com')
+        y+=10; bitfont_render(pdf, 'by Clint Bellinger (2013)', 80, y, Justify.CENTER, url='http://clintbellanger.net')
 
-    bitfont_render(pdf, 'This game exists thanks', 80, 80, Justify.CENTER)
-    bitfont_render(pdf, 'to many generous people:', 80, 90, Justify.CENTER)
+    y+=15; bitfont_render(pdf, 'This game exists thanks', 80, y, Justify.CENTER)
+    y+=10; bitfont_render(pdf, 'to many generous people:', 80, y, Justify.CENTER)
     with bitfont_color_red():
-        bitfont_render(pdf, '>full credits<', 80, 100, Justify.CENTER, url='https://github.com/Lucas-C/undying-dusk#credits--attribution')
+        y+=10; bitfont_render(pdf, '>full credits<', 80, y, Justify.CENTER, url='https://github.com/Lucas-C/undying-dusk#credits--attribution')
 
     bitfont_render(pdf, f'v{__version__}', 159, 115, Justify.RIGHT, size=4)
 
@@ -87,6 +89,7 @@ def _render_title(pdf, start_page_id):
     pdf.add_page()
     pdf.image(REL_RELEASE_DIR + 'images/backgrounds/nightsky.png', x=0, y=0)
     bitfont_render(pdf, 'UNDYING DUSK', 80, 8, Justify.CENTER, size=14)
+    bitfont_render(pdf, '(Phoenyx\'s mod)', 80, 28, Justify.CENTER)
     bitfont_render(pdf, 'HOW TO PLAY', 80, 64, Justify.CENTER, page_id=2)
     bitfont_render(pdf, 'START', 80, 76, Justify.CENTER, page_id=start_page_id)
     return bitfont_render(pdf, 'CREDITS', 80, 88, Justify.CENTER, page_id=1)  # creating a dummy link to credits for now
