@@ -137,7 +137,7 @@ def power_burn(game_state, next_pos_facing=None, next_tile_facing=None):
             if _enemy.category == enemy().ENEMY_CATEGORY_UNDEAD:
                 attack_damage *= 2  # damages are doubled against undeads
             elif _enemy.category == enemy().ENEMY_CATEGORY_DEMON:
-                attack_damage //= 2  # damages are halfed against demons
+                attack_damage //= 2  # damages are halved against demons
             if _round.hero_crit:
                 attack_damage *= 2  # damages are doubled in case of a critical hit
                 log_action = "Critical " + log_action
